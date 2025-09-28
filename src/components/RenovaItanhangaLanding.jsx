@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Instagram, Facebook, ShoppingCart, Clock, Star, Shield, Truck, CreditCard, Menu, X, Plus, Minus, Trash2, MessageCircle, ChevronUp, ChevronDown } from 'lucide-react';
+import { Instagram, Facebook, ShoppingCart, Clock, Star, Shield, Truck, CreditCard, Menu, X, Plus, Minus, Trash2, MessageCircle, ChevronUp, ChevronDown, Search } from 'lucide-react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 // Componente CartModal
 const CartModal = ({ setShowCart, cartItems, updateQuantity, removeFromCart, getCartItemCount, getCartTotal, sendWhatsAppOrder, cartScrollRef, clientName, setClientName, deliveryMethod, setDeliveryMethod, paymentMethod, setPaymentMethod }) => {
@@ -46,7 +48,7 @@ const CartModal = ({ setShowCart, cartItems, updateQuantity, removeFromCart, get
               {cartItems.map(item => (
                 <div key={`cart-item-${item.id}`} className="flex items-center space-x-3 bg-gray-50 p-3 rounded-lg">
                   <div className="relative flex-shrink-0">
-                    <img src={item.image} alt={item.name} className="w-12 sm:w-14 h-12 sm:h-14 object-cover rounded-lg" />
+                    <img src={item.image} alt={item.name} loading="lazy" className="w-12 sm:w-14 h-12 sm:h-14 object-cover rounded-lg" />
                     <div className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold px-1.5 py-0.5 rounded-full">
                       -{Math.round(((item.originalPrice - item.price) / item.originalPrice) * 100)}%
                     </div>
@@ -101,7 +103,7 @@ const CartModal = ({ setShowCart, cartItems, updateQuantity, removeFromCart, get
                 className="flex items-center space-x-2 text-green-600 hover:text-green-700 transition-colors text-sm sm:text-base font-semibold"
               >
                 <span>
-                  {isCheckoutExpanded ? 'Visualizar Produtos' : 'Click aqui Conferir Dados'}
+                  {isCheckoutExpanded ? 'Visualizar Produtos' : 'Conferir Dados'}
                 </span>
                 {isCheckoutExpanded ? (
                   <ChevronUp className="w-4 sm:w-5 h-4 sm:h-5" />
@@ -199,6 +201,9 @@ const RenovaItanhangaLanding = () => {
   const [clientName, setClientName] = useState('');
   const [deliveryMethod, setDeliveryMethod] = useState('');
   const [paymentMethod, setPaymentMethod] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [priceFilter, setPriceFilter] = useState('');
+  const [bestsellerFilter, setBestsellerFilter] = useState(false);
 
   // Ref para scroll do carrinho
   const cartScrollRef = useRef(null);
@@ -241,6 +246,13 @@ const RenovaItanhangaLanding = () => {
       ctaText: "Conferir Novidades",
       ctaLink: "#produtos"
     }
+  ];
+
+  // Dados dos depoimentos
+  const testimonials = [
+    { name: "João Silva", text: "Entrega rápida e produtos de qualidade. Recomendo!", rating: 5 },
+    { name: "Maria Oliveira", text: "Melhor preço da região e atendimento excelente!", rating: 4 },
+    { name: "Carlos Souza", text: "Comprei tudo para minha obra, sem problemas!", rating: 5 }
   ];
 
   // Dados dos produtos por categoria
@@ -598,18 +610,29 @@ const RenovaItanhangaLanding = () => {
     }
   };
 
-  const currentProducts = productCategories[activeCategory]?.products || [];
-  const currentCategoryInfo = productCategories[activeCategory] || {};
+  // Filtragem de produtos
+  const filteredProducts = productCategories[activeCategory]?.products.filter(product => {
+    const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesPrice = priceFilter
+      ? (priceFilter === '0-50' && product.price <= 50) ||
+        (priceFilter === '50-100' && product.price > 50 && product.price <= 100) ||
+        (priceFilter === '100+' && product.price > 100)
+      : true;
+    const matchesBestseller = bestsellerFilter ? product.bestseller : true;
+    return matchesSearch && matchesPrice && matchesBestseller;
+  }) || [];
 
   // Funções do carrinho
   const addToCart = (product) => {
     setCartItems(prevItems => {
       const existingItem = prevItems.find(item => item.id === product.id);
       if (existingItem) {
+        toast.success(`${product.name} quantidade atualizada!`);
         return prevItems.map(item =>
           item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
         );
       } else {
+        toast.success(`${product.name} adicionado ao carrinho!`);
         return [...prevItems, { ...product, quantity: 1 }];
       }
     });
@@ -625,18 +648,14 @@ const RenovaItanhangaLanding = () => {
       return;
     }
     
-    setCartItems(prevItems =>
-      prevItems.map(item =>
+    setCartItems(prevItems => {
+      const updatedItems = prevItems.map(item =>
         item.id === productId ? { ...item, quantity: newQuantity } : item
-      )
-    );
-  };
-
-  const confirmRemoveFromCart = () => {
-    if (showDeleteConfirm) {
-      setCartItems(prevItems => prevItems.filter(item => item.id !== showDeleteConfirm.productId));
-      setShowDeleteConfirm(null);
-    }
+      );
+      const product = prevItems.find(item => item.id === productId);
+      toast.info(`${product.name} atualizado para ${newQuantity} unidade${newQuantity > 1 ? 's' : ''}`);
+      return updatedItems;
+    });
   };
 
   const removeFromCart = (productId) => {
@@ -645,6 +664,17 @@ const RenovaItanhangaLanding = () => {
       productId,
       productName: product?.name || 'Item'
     });
+  };
+
+  const confirmRemoveFromCart = () => {
+    if (showDeleteConfirm) {
+      setCartItems(prevItems => {
+        const product = prevItems.find(item => item.id === showDeleteConfirm.productId);
+        toast.error(`${product.name} removido do carrinho`);
+        return prevItems.filter(item => item.id !== showDeleteConfirm.productId);
+      });
+      setShowDeleteConfirm(null);
+    }
   };
 
   const getCartTotal = () => {
@@ -657,19 +687,19 @@ const RenovaItanhangaLanding = () => {
 
   const sendWhatsAppOrder = () => {
     if (cartItems.length === 0) {
-      alert('Seu carrinho está vazio!');
+      toast.error('Seu carrinho está vazio!');
       return;
     }
     if (!clientName.trim()) {
-      alert('Por favor, insira seu nome antes de finalizar o pedido.');
+      toast.error('Por favor, insira seu nome antes de finalizar o pedido.');
       return;
     }
     if (!deliveryMethod) {
-      alert('Por favor, selecione o método de entrega.');
+      toast.error('Por favor, selecione o método de entrega.');
       return;
     }
     if (!paymentMethod) {
-      alert('Por favor, selecione a forma de pagamento.');
+      toast.error('Por favor, selecione a forma de pagamento.');
       return;
     }
 
@@ -690,6 +720,7 @@ const RenovaItanhangaLanding = () => {
     const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`;
     window.open(whatsappUrl, '_blank');
     
+    toast.success('Pedido enviado para o WhatsApp!');
     setCartItems([]);
     setShowCart(false);
     setClientName('');
@@ -734,6 +765,9 @@ const RenovaItanhangaLanding = () => {
 
   return (
     <div className="min-h-screen bg-white">
+      {/* Toast Container */}
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar closeOnClick pauseOnHover />
+
       {/* HEADER */}
       <header className="bg-white shadow-md sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
@@ -748,7 +782,11 @@ const RenovaItanhangaLanding = () => {
               <a href="#sobre" className="text-gray-700 hover:text-green-600 transition-colors text-sm lg:text-base">Sobre</a>
               <a href="#contato" className="text-gray-700 hover:text-green-600 transition-colors text-sm lg:text-base">Contato</a>
               
-              <button onClick={() => setShowCart(true)} className="bg-green-600 text-white px-3 sm:px-4 py-2 rounded-lg hover:bg-green-700 transition-colors relative text-sm lg:text-base">
+              <button 
+                onClick={() => setShowCart(true)} 
+                aria-label={`Abrir carrinho com ${getCartItemCount()} itens`} 
+                className="bg-green-600 text-white px-3 sm:px-4 py-2 rounded-lg hover:bg-green-700 transition-colors relative text-sm lg:text-base"
+              >
                 <ShoppingCart className="w-4 h-4 inline mr-1 sm:mr-2" />
                 Carrinho
                 {getCartItemCount() > 0 && (
@@ -760,7 +798,11 @@ const RenovaItanhangaLanding = () => {
             </nav>
 
             <div className="md:hidden flex items-center space-x-2">
-              <button onClick={() => setShowCart(true)} className="bg-green-600 text-white p-2 rounded-lg hover:bg-green-700 transition-colors relative">
+              <button 
+                onClick={() => setShowCart(true)} 
+                aria-label={`Abrir carrinho com ${getCartItemCount()} itens`} 
+                className="bg-green-600 text-white p-2 rounded-lg hover:bg-green-700 transition-colors relative"
+              >
                 <ShoppingCart className="w-4 sm:w-5 h-4 sm:h-5" />
                 {getCartItemCount() > 0 && (
                   <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-4 sm:w-5 h-4 sm:h-5 flex items-center justify-center">
@@ -883,7 +925,12 @@ const RenovaItanhangaLanding = () => {
             {categoryTabs.map((tab) => (
               <button
                 key={tab.key}
-                onClick={() => setActiveCategory(tab.key)}
+                onClick={() => {
+                  setActiveCategory(tab.key);
+                  setSearchTerm('');
+                  setPriceFilter('');
+                  setBestsellerFilter(false);
+                }}
                 className={`px-2 sm:px-3 py-1 sm:py-2 md:px-4 md:py-3 rounded-lg text-xs sm:text-sm md:text-base font-semibold transition-all duration-300 border-2 ${
                   activeCategory === tab.key
                     ? `${getCategoryColor(tab.key)} text-white shadow-lg transform scale-105`
@@ -895,60 +942,123 @@ const RenovaItanhangaLanding = () => {
             ))}
           </div>
 
-          <div className="text-center mb-6 sm:mb-8">
-            <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 mb-2">{currentCategoryInfo.title}</h3>
-            <p className="text-base sm:text-lg text-gray-600">{currentCategoryInfo.subtitle}</p>
+          {/* Filtros e Busca */}
+          <div className="mb-6 sm:mb-8">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div className="relative w-full sm:w-1/2">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <input
+                  type="text"
+                  placeholder="Buscar produtos..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 text-sm sm:text-base"
+                />
+              </div>
+              <div className="flex flex-wrap gap-2 sm:gap-4">
+                <select
+                  value={priceFilter}
+                  onChange={(e) => setPriceFilter(e.target.value)}
+                  className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 text-sm sm:text-base"
+                >
+                  <option value="">Todos os Preços</option>
+                  <option value="0-50">Até R$50</option>
+                  <option value="50-100">R$50 - R$100</option>
+                  <option value="100+">Acima de R$100</option>
+                </select>
+                <label className="flex items-center space-x-2 text-sm sm:text-base">
+                  <input
+                    type="checkbox"
+                    checked={bestsellerFilter}
+                    onChange={(e) => setBestsellerFilter(e.target.checked)}
+                    className="h-4 w-4 text-green-600 focus:ring-green-600"
+                  />
+                  <span>Mais Vendidos</span>
+                </label>
+              </div>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
-            {currentProducts.map(product => (
-              <div key={product.id} className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:scale-105 relative">
-                {product.bestseller && (
-                  <div className="absolute top-3 sm:top-4 left-3 sm:left-4 z-10">
-                    <div className="bg-red-500 text-white px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-bold animate-pulse">
-                      Mais Vendido
-                    </div>
-                  </div>
-                )}
-                
-                <div className="absolute top-3 sm:top-4 right-3 sm:right-4 z-10">
-                  <div className="bg-green-600 text-white px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-bold">
-                    -{Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}%
-                  </div>
-                </div>
+          <div className="text-center mb-6 sm:mb-8">
+            <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 mb-2">{productCategories[activeCategory].title}</h3>
+            <p className="text-base sm:text-lg text-gray-600">{productCategories[activeCategory].subtitle}</p>
+          </div>
 
-                <div className="relative overflow-hidden">
-                  <img src={product.image} alt={product.name} className="w-full h-40 sm:h-48 object-cover transition-transform duration-300 hover:scale-110" />
-                </div>
-                
-                <div className="p-4 sm:p-6">
-                  <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-2 sm:mb-3 h-10 sm:h-12 flex items-center">{product.name}</h3>
-                  <div className="mb-3 sm:mb-4">
-                    <div className="flex items-center space-x-2 mb-1">
-                      <span className="text-lg sm:text-2xl font-bold text-green-600">R$ {product.price.toFixed(2)}</span>
-                      <span className="text-sm sm:text-lg text-gray-500 line-through">R$ {product.originalPrice.toFixed(2)}</span>
+          {filteredProducts.length === 0 ? (
+            <div className="text-center py-6 sm:py-8">
+              <p className="text-gray-500 text-base sm:text-lg">Nenhum produto encontrado para os filtros selecionados.</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
+              {filteredProducts.map(product => (
+                <div key={product.id} className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:scale-105 relative">
+                  {product.bestseller && (
+                    <div className="absolute top-3 sm:top-4 left-3 sm:left-4 z-10">
+                      <div className="bg-red-500 text-white px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-bold animate-pulse">
+                        Mais Vendido
+                      </div>
                     </div>
-                    <p className="text-xs sm:text-sm text-green-600 font-medium">
-                      Economia de R$ {(product.originalPrice - product.price).toFixed(2)}
-                    </p>
+                  )}
+                  
+                  <div className="absolute top-3 sm:top-4 right-3 sm:right-4 z-10">
+                    <div className="bg-green-600 text-white px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-bold">
+                      -{Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}%
+                    </div>
+                  </div>
+
+                  <div className="relative overflow-hidden">
+                    <img src={product.image} alt={product.name} loading="lazy" className="w-full h-40 sm:h-48 object-cover transition-transform duration-300 hover:scale-110" />
                   </div>
                   
-                  <button 
-                    onClick={() => addToCart(product)}
-                    className="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white py-2 sm:py-3 px-4 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl text-sm sm:text-base"
-                  >
-                    Adicionar ao Carrinho
-                  </button>
+                  <div className="p-4 sm:p-6">
+                    <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-2 sm:mb-3 h-10 sm:h-12 flex items-center">{product.name}</h3>
+                    <div className="mb-3 sm:mb-4">
+                      <div className="flex items-center space-x-2 mb-1">
+                        <span className="text-lg sm:text-2xl font-bold text-green-600">R$ {product.price.toFixed(2)}</span>
+                        <span className="text-sm sm:text-lg text-gray-500 line-through">R$ {product.originalPrice.toFixed(2)}</span>
+                      </div>
+                      <p className="text-xs sm:text-sm text-green-600 font-medium">
+                        Economia de R$ {(product.originalPrice - product.price).toFixed(2)}
+                      </p>
+                    </div>
+                    
+                    <button 
+                      onClick={() => addToCart(product)}
+                      className="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white py-2 sm:py-3 px-4 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl text-sm sm:text-base"
+                    >
+                      Adicionar ao Carrinho
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
 
           <div className="text-center mt-6 sm:mt-8">
             <p className="text-gray-600 text-sm sm:text-base">
-              Mostrando <span className="font-bold text-green-600">{currentProducts.length}</span> produtos 
-              da categoria <span className="font-bold">{currentCategoryInfo.title}</span>
+              Mostrando <span className="font-bold text-green-600">{filteredProducts.length}</span> produtos 
+              da categoria <span className="font-bold">{productCategories[activeCategory].title}</span>
             </p>
+          </div>
+        </div>
+      </section>
+
+      {/* DEPOIMENTOS */}
+      <section className="py-12 sm:py-16 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 text-center mb-8 sm:mb-12">O que nossos clientes dizem</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
+            {testimonials.map((testimonial, index) => (
+              <div key={index} className="bg-white p-4 sm:p-6 rounded-lg shadow-lg text-center hover:shadow-xl transition-all duration-300">
+                <p className="text-gray-600 text-sm sm:text-base mb-4">{testimonial.text}</p>
+                <div className="flex justify-center mb-2">
+                  {[...Array(testimonial.rating)].map((_, i) => (
+                    <Star key={i} className="w-4 sm:w-5 h-4 sm:h-5 text-yellow-400 fill-current" />
+                  ))}
+                </div>
+                <p className="font-semibold text-gray-900 text-sm sm:text-base">{testimonial.name}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
