@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ShoppingCart, Clock, Star, Shield, Truck, CreditCard, Menu, X, Plus, Minus, Trash2, MessageCircle, ChevronUp } from 'lucide-react';
+import { Instagram, Facebook, ShoppingCart, Clock, Star, Shield, Truck, CreditCard, Menu, X, Plus, Minus, Trash2, MessageCircle, ChevronUp } from 'lucide-react';
 
 // Componente CartModal
 const CartModal = ({ setShowCart, cartItems, updateQuantity, removeFromCart, getCartItemCount, getCartTotal, sendWhatsAppOrder, cartScrollRef, clientName, setClientName, deliveryMethod, setDeliveryMethod, paymentMethod, setPaymentMethod }) => {
@@ -188,7 +188,7 @@ const RenovaItanhangaLanding = () => {
       id: 1,
       title: "MEGA PROMOÇÃO DE INVERNO",
       subtitle: "Até 40% OFF em materiais selecionados",
-      image: "/images/fotobanner/image.png",
+      image: "/Renova/images/fotobanner/image.png",
       ctaText: "Aproveitar Oferta",
       ctaLink: "#produtos"
     },
@@ -196,7 +196,7 @@ const RenovaItanhangaLanding = () => {
       id: 2,
       title: "ESTOQUE LIMITADO DE TIJOLOS",
       subtitle: "Garanta antes que acabe – últimas unidades disponíveis",
-      image: "/images/fotobanner/fotobanner3.png",
+      image: "/Renova/images/fotobanner/fotobanner3.png",
       ctaText: "Comprar Agora",
       ctaLink: "#produtos"
     },
@@ -204,7 +204,7 @@ const RenovaItanhangaLanding = () => {
       id: 3,
       title: "QUALIDADE GARANTIDA",
       subtitle: "Marcas líderes aprovadas por engenheiros e mestres de obra",
-      image: "/images/fotobanner/fotobanner2.jpeg",
+      image: "/Renova/images/fotobanner/fotobanner2.jpeg",
       ctaText: "Ver Produtos",
       ctaLink: "#produtos"
     },
@@ -212,7 +212,7 @@ const RenovaItanhangaLanding = () => {
       id: 4,
       title: "LANÇAMENTO EXCLUSIVO",
       subtitle: "Novos modelos de ferramentas para facilitar sua obra",
-      image: "/images/fotobanner/lancamento.jpg",
+      image: "/Renova/images/fotobanner/lancamento.jpg",
       ctaText: "Conferir Novidades",
       ctaLink: "#produtos"
     }
@@ -237,7 +237,7 @@ const RenovaItanhangaLanding = () => {
           name: "Tijolo Cerâmico 8 Furos",
           originalPrice: 0.89,
           price: 0.69,
-          image: "/images/produtos/tijolo.png",
+          image: "/Renova/images/produtos/tijolo.png",
           bestseller: false
         },
         {
@@ -245,7 +245,7 @@ const RenovaItanhangaLanding = () => {
           name: "Argamassa AC-III 20kg",
           originalPrice: 18.50,
           price: 14.90,
-          image: "/images/produtos/Argamassa.png",
+          image: "/Renova/images/produtos/Argamassa.png",
           bestseller: true
         },
         {
@@ -253,7 +253,7 @@ const RenovaItanhangaLanding = () => {
           name: "Areia Média - m³",
           originalPrice: 45.00,
           price: 39.90,
-          image: "/images/produtos/areia.png",
+          image: "/Renova/images/produtos/areia.png",
           bestseller: false
         },
         {
@@ -261,7 +261,7 @@ const RenovaItanhangaLanding = () => {
           name: "Cal Hidratada 20kg",
           originalPrice: 12.90,
           price: 9.90,
-          image: "/images/produtos/cimentoItau.png",
+          image: "/Renova/images/produtos/cimentoItau.png",
           bestseller: false
         },
         {
@@ -269,7 +269,7 @@ const RenovaItanhangaLanding = () => {
           name: "Pedra Brita 1 - m³",
           originalPrice: 62.00,
           price: 52.90,
-          image: "/images/produtos/britas.png",
+          image: "/Renova/images/produtos/britas.png",
           bestseller: true
         }
       ]
@@ -283,7 +283,7 @@ const RenovaItanhangaLanding = () => {
           name: "Vergalhão 10mm - 12m",
           originalPrice: 42.00,
           price: 36.90,
-          image: "/images/produtos/ferro.png",
+          image: "/Renova/images/produtos/ferro.png",
           bestseller: true
         },
         {
@@ -291,7 +291,7 @@ const RenovaItanhangaLanding = () => {
           name: "Bloco de Concreto 14x19x39",
           originalPrice: 3.20,
           price: 2.85,
-          image: "/images/produtos/bloco.jpg",
+          image: "/Renova/images/produtos/bloco.jpg",
           bestseller: false
         },
         {
@@ -299,7 +299,7 @@ const RenovaItanhangaLanding = () => {
           name: "Brita 1 - m³",
           originalPrice: 55.00,
           price: 49.90,
-          image: "/images/produtos/britas.png",
+          image: "/Renova/images/produtos/britas.png",
           bestseller: false
         },
         {
@@ -307,7 +307,7 @@ const RenovaItanhangaLanding = () => {
           name: "Cimento CP-IV 50kg",
           originalPrice: 29.90,
           price: 26.90,
-          image: "/images/produtos/cimentoVotoran.png",
+          image: "/Renova/images/produtos/cimentoVotoran.png",
           bestseller: true
         },
         {
@@ -315,7 +315,7 @@ const RenovaItanhangaLanding = () => {
           name: "Vergalhão 8mm - 12m",
           originalPrice: 28.50,
           price: 25.90,
-          image: "/images/produtos/ferro.png",
+          image: "/Renova/images/produtos/ferro.png",
           bestseller: false
         },
         {
@@ -323,7 +323,7 @@ const RenovaItanhangaLanding = () => {
           name: "Laje Treliçada 12cm",
           originalPrice: 89.00,
           price: 79.90,
-          image: "/images/produtos/lajeTrelica.png",
+          image: "/Renova/images/produtos/lajeTrelica.png",
           bestseller: true
         },
         {
@@ -331,7 +331,7 @@ const RenovaItanhangaLanding = () => {
           name: "Porcelanato Marmorizado 61x61cm",
           originalPrice: 56.90,
           price: 49.73,
-          image: "/images/produtos/ceramica.png",
+          image: "/Renova/images/produtos/ceramica.png",
           bestseller: false
         },
         {
@@ -339,7 +339,7 @@ const RenovaItanhangaLanding = () => {
           name: "Concreto Usinado FCK25",
           originalPrice: 285.00,
           price: 265.90,
-          image: "/images/produtos/concreto.png",
+          image: "/Renova/images/produtos/concreto.png",
           bestseller: true
         }
       ]
@@ -353,7 +353,7 @@ const RenovaItanhangaLanding = () => {
           name: "Parafuso Phillips 6x100 - 50un",
           originalPrice: 24.90,
           price: 19.90,
-          image: "/images/produtos/parafuso.png",
+          image: "/Renova/images/produtos/parafuso.png",
           bestseller: false
         },
         {
@@ -361,7 +361,7 @@ const RenovaItanhangaLanding = () => {
           name: "Bucha S8 - Pacote 100un",
           originalPrice: 18.00,
           price: 14.50,
-          image: "/images/produtos/buchadeParafuso.png",
+          image: "/Renova/images/produtos/buchadeParafuso.png",
           bestseller: true
         },
         {
@@ -369,7 +369,7 @@ const RenovaItanhangaLanding = () => {
           name: "Dobradiça 3.1/2\" Cromada",
           originalPrice: 15.90,
           price: 12.90,
-          image: "/images/produtos/dobradiça.png",
+          image: "/Renova/images/produtos/dobradiça.png",
           bestseller: false
         },
         {
@@ -377,7 +377,7 @@ const RenovaItanhangaLanding = () => {
           name: "Fechadura Externa Cromada",
           originalPrice: 89.90,
           price: 69.90,
-          image: "/images/produtos/fechadura.png",
+          image: "/Renova/images/produtos/fechadura.png",
           bestseller: true
         },
         {
@@ -385,7 +385,7 @@ const RenovaItanhangaLanding = () => {
           name: "Prego 18x30 - 1kg",
           originalPrice: 14.50,
           price: 11.90,
-          image: "/images/produtos/pregos.png",
+          image: "/Renova/images/produtos/pregos.png",
           bestseller: false
         },
         {
@@ -393,7 +393,7 @@ const RenovaItanhangaLanding = () => {
           name: "Chumbador M10x80",
           originalPrice: 3.80,
           price: 2.90,
-          image: "/images/produtos/buchaPresao.png",
+          image: "/Renova/images/produtos/buchaPresao.png",
           bestseller: true
         }
       ]
@@ -407,7 +407,7 @@ const RenovaItanhangaLanding = () => {
           name: "Tinta Acrílica Branca 18L",
           originalPrice: 125.00,
           price: 98.90,
-          image: "/images/produtos/tinta.png",
+          image: "/Renova/images/produtos/tinta.png",
           bestseller: true
         },
         {
@@ -415,7 +415,7 @@ const RenovaItanhangaLanding = () => {
           name: "Rejunte Flexível Cinza 1kg",
           originalPrice: 12.50,
           price: 9.90,
-          image: "/images/produtos/rejunte.png",
+          image: "/Renova/images/produtos/rejunte.png",
           bestseller: false
         },
         {
@@ -423,7 +423,7 @@ const RenovaItanhangaLanding = () => {
           name: "Rolo de Pintura 23cm",
           originalPrice: 8.90,
           price: 6.90,
-          image: "/images/produtos/rolodePinta.png",
+          image: "/Renova/images/produtos/rolodePinta.png",
           bestseller: false
         },
         {
@@ -431,7 +431,7 @@ const RenovaItanhangaLanding = () => {
           name: "Pincel Trincha 4\"",
           originalPrice: 22.00,
           price: 17.90,
-          image: "/images/produtos/pincel.png",
+          image: "/Renova/images/produtos/pincel.png",
           bestseller: true
         },
         {
@@ -439,7 +439,7 @@ const RenovaItanhangaLanding = () => {
           name: "Tinta Látex Fosco 18L",
           originalPrice: 89.90,
           price: 72.90,
-          image: "/images/produtos/tintaprotege.png",
+          image: "/Renova/images/produtos/tintaprotege.png",
           bestseller: false
         },
         {
@@ -447,7 +447,7 @@ const RenovaItanhangaLanding = () => {
           name: "Lixa d'Água 150 - Kit 10un",
           originalPrice: 25.00,
           price: 19.90,
-          image: "/images/produtos/lixa.png",
+          image: "/Renova/images/produtos/lixa.png",
           bestseller: true
         }
       ]
@@ -461,7 +461,7 @@ const RenovaItanhangaLanding = () => {
           name: "Cano PVC 100mm - 6m",
           originalPrice: 45.90,
           price: 38.90,
-          image: "/images/produtos/tuboPVC.png",
+          image: "/Renova/images/produtos/tuboPVC.png",
           bestseller: true
         },
         {
@@ -469,7 +469,7 @@ const RenovaItanhangaLanding = () => {
           name: "Registro Gaveta 1/2\"",
           originalPrice: 28.50,
           price: 22.90,
-          image: "/images/produtos/registro.png",
+          image: "/Renova/images/produtos/registro.png",
           bestseller: false
         },
         {
@@ -477,7 +477,7 @@ const RenovaItanhangaLanding = () => {
           name: "Caixa d'Água 1000L",
           originalPrice: 485.00,
           price: 425.90,
-          image: "/images/produtos/caixadeagua.png",
+          image: "/Renova/images/produtos/caixadeagua.png",
           bestseller: true
         },
         {
@@ -485,7 +485,7 @@ const RenovaItanhangaLanding = () => {
           name: "Fio Elétrico 2.5mm - 100m",
           originalPrice: 89.90,
           price: 76.90,
-          image: "/images/produtos/fio.png",
+          image: "/Renova/images/produtos/fio.png",
           bestseller: false
         }
       ]
@@ -950,80 +950,107 @@ const RenovaItanhangaLanding = () => {
 
       {/* FOOTER */}
       <footer className="bg-gray-900 text-white py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div>
-              <h3 className="text-xl font-bold text-green-400 mb-4">Renova Itanhangá</h3>
-              <p className="text-gray-300 mb-4">Sua loja de materiais de construção de confiança há mais de 20 anos.</p>
-              <div className="text-gray-400">
-                <p>📍 Itanhangá, Rio de Janeiro - RJ</p>
-                <p>📞 (21) 979100303</p>
-                <p>✉️ contato@renovaitanhanga.com.br</p>
-              </div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div>
+            <h3 className="text-xl font-bold text-green-400 mb-4">Renova Itanhangá</h3>
+            <p className="text-gray-300 mb-4">Sua loja de materiais de construção de confiança há mais de 20 anos.</p>
+            <div className="text-gray-400">
+              <p>📍 Itanhangá, Rio de Janeiro - RJ</p>
+              <p>📞 (21) 979100303</p>
+              <p>✉️ contato@renovaitanhanga.com.br</p>
             </div>
-
-            <div>
-              <h4 className="font-semibold mb-4">Entrega Rápida Direto na Sua Residência</h4>
+            <div className="mt-6">
+              <h4 className="font-semibold mb-4">Siga-nos</h4>
               <ul className="space-y-2 text-gray-300">
                 <li>
-                  <button
-                    onClick={() => setShowEntrega(!showEntrega)}
-                    className="hover:text-green-400 transition-colors flex items-center"
+                  <a
+                    href="https://www.instagram.com/sua-conta-real"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center hover:text-green-400 transition-colors"
                   >
-                    Política de Entrega
-                    <span className={`ml-2 transform transition-transform ${showEntrega ? "rotate-180" : ""}`}>
-                      ▼
-                    </span>
-                  </button>
-                  {showEntrega && (
-                    <p className="mt-2 text-sm text-gray-400">
-                      Nossas entregas são realizadas em até 3 horas após a confirmação do pagamento. O prazo pode variar conforme a região.
-                    </p>
-                  )}
+                    <Instagram className="w-5 h-5 mr-2" />
+                    Instagram
+                  </a>
                 </li>
                 <li>
-                  <button
-                    onClick={() => setShowTrocas(!showTrocas)}
-                    className="hover:text-green-400 transition-colors flex items-center"
+                  <a
+                    href="https://www.facebook.com/sua-conta-real"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center hover:text-green-400 transition-colors"
                   >
-                    Devoluções & Trocas
-                    <span className={`ml-2 transform transition-transform ${showTrocas ? "rotate-180" : ""}`}>
-                      ▼
-                    </span>
-                  </button>
-                  {showTrocas && (
-                    <p className="mt-2 text-sm text-gray-400">
-                      Aceitamos devoluções e trocas em até 7 dias após a entrega, desde que o produto esteja em perfeitas condições.
-                    </p>
-                  )}
+                    <Facebook className="w-5 h-5 mr-2" />
+                    Facebook
+                  </a>
                 </li>
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="font-semibold mb-4">Empresa</h4>
-              <ul className="space-y-2 text-gray-300">
-                <li><a href="#" className="hover:text-green-400 transition-colors">Sobre Nós</a></li>
-                <li><a href="#" className="hover:text-green-400 transition-colors">Nossas Lojas</a></li>
-                <li><a href="#" className="hover:text-green-400 transition-colors">Política de Privacidade</a></li>
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="font-semibold mb-4">Atendimento</h4>
-              <ul className="space-y-2 text-gray-300">
-                <li>Segunda a Sexta: 7h às 18h</li>
-                <li>Sábado: 7h às 16h</li>
-                <li>Domingo: 8h às 12h</li>
               </ul>
             </div>
           </div>
 
-          <div className="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2025 Renova Itanhangá. Todos os direitos reservados.</p>
+          <div>
+            <h4 className="font-semibold mb-4">Entrega Rápida Direto na Sua Residência</h4>
+            <ul className="space-y-2 text-gray-300">
+              <li>
+                <button
+                  onClick={() => setShowEntrega(!showEntrega)}
+                  className="hover:text-green-400 transition-colors flex items-center"
+                >
+                  Política de Entrega
+                  <span className={`ml-2 transform transition-transform ${showEntrega ? "rotate-180" : ""}`}>
+                    ▼
+                  </span>
+                </button>
+                {showEntrega && (
+                  <p className="mt-2 text-sm text-gray-400">
+                    Nossas entregas são realizadas em até 3 horas após a confirmação do pagamento. O prazo pode variar conforme a região.
+                  </p>
+                )}
+              </li>
+              <li>
+                <button
+                  onClick={() => setShowTrocas(!showTrocas)}
+                  className="hover:text-green-400 transition-colors flex items-center"
+                >
+                  Devoluções & Trocas
+                  <span className={`ml-2 transform transition-transform ${showTrocas ? "rotate-180" : ""}`}>
+                    ▼
+                  </span>
+                </button>
+                {showTrocas && (
+                  <p className="mt-2 text-sm text-gray-400">
+                    Aceitamos devoluções e trocas em até 7 dias após a entrega, desde que o produto esteja em perfeitas condições.
+                  </p>
+                )}
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="font-semibold mb-4">Empresa</h4>
+            <ul className="space-y-2 text-gray-300">
+              <li><a href="#" className="hover:text-green-400 transition-colors">Sobre Nós</a></li>
+              <li><a href="#" className="hover:text-green-400 transition-colors">Nossas Lojas</a></li>
+              <li><a href="#" className="hover:text-green-400 transition-colors">Política de Privacidade</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="font-semibold mb-4">Atendimento</h4>
+            <ul className="space-y-2 text-gray-300">
+              <li>Segunda a Sexta: 7h às 18h</li>
+              <li>Sábado: 7h às 16h</li>
+              <li>Domingo: 8h às 12h</li>
+            </ul>
           </div>
         </div>
-      </footer>
+
+        <div className="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+          <p>&copy; 2025 Renova Itanhangá. Todos os direitos reservados.</p>
+        </div>
+      </div>
+    </footer>
 
       {/* BOTÃO FLUTUANTE PARA SUBIR */}
       {showScrollButton && (
