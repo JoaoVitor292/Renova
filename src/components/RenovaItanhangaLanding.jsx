@@ -229,7 +229,7 @@ const RenovaItanhangaLanding = () => {
           name: "Cimento CP-II 50kg",
           originalPrice: 32.90,
           price: 24.90,
-          image: "/images/produtos/cimentoP2.jpg",
+          image: "/Renova/images/produtos/cimentoP2.jpg",
           bestseller: true
         },
         {
