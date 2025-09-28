@@ -1,56 +1,63 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Instagram, Facebook, ShoppingCart, Clock, Star, Shield, Truck, CreditCard, Menu, X, Plus, Minus, Trash2, MessageCircle, ChevronUp } from 'lucide-react';
+import { Instagram, Facebook, ShoppingCart, Clock, Star, Shield, Truck, CreditCard, Menu, X, Plus, Minus, Trash2, MessageCircle, ChevronUp, ChevronDown } from 'lucide-react';
 
 // Componente CartModal
 const CartModal = ({ setShowCart, cartItems, updateQuantity, removeFromCart, getCartItemCount, getCartTotal, sendWhatsAppOrder, cartScrollRef, clientName, setClientName, deliveryMethod, setDeliveryMethod, paymentMethod, setPaymentMethod }) => {
+  const [isCheckoutExpanded, setIsCheckoutExpanded] = useState(false);
+
+  // Verificação para evitar erro de renderização
+  if (!cartItems) {
+    console.error('Erro: cartItems não está definido');
+    return null;
+  }
+
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] flex flex-col">
+    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-2 sm:p-4">
+      <div className="bg-white rounded-lg max-w-lg w-full max-h-[90vh] flex flex-col">
         {/* Header fixo do carrinho */}
-        <div className="p-6 border-b border-gray-200 flex justify-between items-center flex-shrink-0">
-          <h2 className="text-2xl font-bold text-gray-900">
-            Carrinho de Compras ({getCartItemCount()} {getCartItemCount() === 1 ? 'item' : 'itens'})
+        <div className="p-4 sm:p-6 border-b border-gray-200 flex justify-between items-center flex-shrink-0">
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
+            Carrinho ({getCartItemCount ? getCartItemCount() : 0} {getCartItemCount && getCartItemCount() === 1 ? 'item' : 'itens'})
           </h2>
           <button onClick={() => setShowCart(false)} className="p-2 hover:bg-gray-100 rounded-lg">
-            <X className="w-6 h-6" />
+            <X className="w-5 sm:w-6 h-5 sm:h-6" />
           </button>
         </div>
 
         {/* Área de scroll do carrinho */}
         <div 
           ref={cartScrollRef} 
-          className="flex-1 overflow-y-auto p-6"
+          className="flex-1 overflow-y-auto p-4 sm:p-6"
           style={{ scrollBehavior: 'auto' }}
         >
           {cartItems.length === 0 ? (
-            <div className="text-center py-8">
-              <ShoppingCart className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-              <p className="text-gray-500 text-lg">Seu carrinho está vazio</p>
+            <div className="text-center py-6 sm:py-8">
+              <ShoppingCart className="w-12 sm:w-16 h-12 sm:h-16 text-gray-300 mx-auto mb-4" />
+              <p className="text-gray-500 text-base sm:text-lg">Seu carrinho está vazio</p>
               <button
                 onClick={() => setShowCart(false)}
-                className="mt-4 bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700"
+                className="mt-4 bg-green-600 text-white px-4 sm:px-6 py-2 rounded-lg hover:bg-green-700 text-sm sm:text-base"
               >
                 Continuar Comprando
               </button>
             </div>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               {cartItems.map(item => (
                 <div key={`cart-item-${item.id}`} className="flex items-center space-x-3 bg-gray-50 p-3 rounded-lg">
                   <div className="relative flex-shrink-0">
-                    <img src={item.image} alt={item.name} className="w-14 h-14 object-cover rounded-lg" />
+                    <img src={item.image} alt={item.name} className="w-12 sm:w-14 h-12 sm:h-14 object-cover rounded-lg" />
                     <div className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold px-1.5 py-0.5 rounded-full">
                       -{Math.round(((item.originalPrice - item.price) / item.originalPrice) * 100)}%
                     </div>
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-gray-900 text-sm">{item.name}</h3>
+                    <h3 className="font-semibold text-gray-900 text-sm sm:text-base">{item.name}</h3>
                     <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-2">
-                      <p className="text-green-600 font-bold text-sm">R$ {item.price.toFixed(2)}</p>
-                      <p className="text-gray-500 line-through text-xs">R$ {item.originalPrice.toFixed(2)}</p>
+                      <p className="text-green-600 font-bold text-sm sm:text-base">R$ {item.price.toFixed(2)}</p>
+                      <p className="text-gray-500 line-through text-xs sm:text-sm">R$ {item.originalPrice.toFixed(2)}</p>
                     </div>
                   </div>
-                  
                   <div className="flex items-center space-x-1">
                     <button 
                       onClick={() => updateQuantity(item.id, item.quantity - 1)} 
@@ -58,7 +65,7 @@ const CartModal = ({ setShowCart, cartItems, updateQuantity, removeFromCart, get
                     >
                       <Minus className="w-3 h-3" />
                     </button>
-                    <span className="px-2 py-1 bg-white border rounded text-center min-w-[2.5rem] text-sm">
+                    <span className="px-2 py-1 bg-white border rounded text-center min-w-[2rem] sm:min-w-[2.5rem] text-sm">
                       {item.quantity}
                     </span>
                     <button 
@@ -68,9 +75,8 @@ const CartModal = ({ setShowCart, cartItems, updateQuantity, removeFromCart, get
                       <Plus className="w-3 h-3" />
                     </button>
                   </div>
-                  
                   <div className="text-right flex-shrink-0">
-                    <p className="font-bold text-gray-900 text-sm">
+                    <p className="font-bold text-gray-900 text-sm sm:text-base">
                       R$ {(item.price * item.quantity).toFixed(2)}
                     </p>
                     <button 
@@ -88,71 +94,89 @@ const CartModal = ({ setShowCart, cartItems, updateQuantity, removeFromCart, get
 
         {/* Footer fixo com total, inputs e botão de finalizar */}
         {cartItems.length > 0 && (
-          <div className="border-t pt-6 p-6 flex-shrink-0 bg-white">
-            <div className="space-y-4 mb-4">
-              <div>
-                <label htmlFor="clientName" className="block text-sm font-medium text-gray-700 mb-1">
-                  Seu Nome
-                </label>
-                <input
-                  type="text"
-                  id="clientName"
-                  value={clientName}
-                  onChange={(e) => setClientName(e.target.value)}
-                  placeholder="Digite seu nome"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600"
-                />
-              </div>
-              <div>
-                <label htmlFor="deliveryMethod" className="block text-sm font-medium text-gray-700 mb-1">
-                  Método de Entrega
-                </label>
-                <select
-                  id="deliveryMethod"
-                  value={deliveryMethod}
-                  onChange={(e) => setDeliveryMethod(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600"
-                >
-                  <option value="">Selecione uma opção</option>
-                  <option value="Retirada na Loja">Retirada na Loja</option>
-                  <option value="Entrega">Entrega</option>
-                </select>
-              </div>
-              <div>
-                <label htmlFor="paymentMethod" className="block text-sm font-medium text-gray-700 mb-1">
-                  Forma de Pagamento
-                </label>
-                <select
-                  id="paymentMethod"
-                  value={paymentMethod}
-                  onChange={(e) => setPaymentMethod(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600"
-                >
-                  <option value="">Selecione uma opção</option>
-                  <option value="Pix">Pix</option>
-                  <option value="Cartão de Débito">Cartão de Débito</option>
-                  <option value="Cartão de Crédito">Cartão de Crédito</option>
-                  <option value="Dinheiro">Dinheiro</option>
-                </select>
+          <div className="border-t pt-4 sm:pt-6 p-4 sm:p-6 flex-shrink-0 bg-white">
+            <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
+              <button
+                onClick={() => setIsCheckoutExpanded(!isCheckoutExpanded)}
+                className="flex items-center space-x-2 text-green-600 hover:text-green-700 transition-colors text-sm sm:text-base font-semibold"
+              >
+                <span>
+                  {isCheckoutExpanded ? 'Visualizar Produtos' : 'Click aqui Conferir Dados'}
+                </span>
+                {isCheckoutExpanded ? (
+                  <ChevronUp className="w-4 sm:w-5 h-4 sm:h-5" />
+                ) : (
+                  <ChevronDown className="w-4 sm:w-5 h-4 sm:h-5" />
+                )}
+              </button>
+              <div className="flex items-center space-x-2 shrink-0">
+                <span className="text-base sm:text-xl font-semibold text-gray-900">Total:</span>
+                <span className="text-lg sm:text-2xl font-bold text-green-600">R$ {getCartTotal ? getCartTotal().toFixed(2) : '0.00'}</span>
               </div>
             </div>
-            <div className="flex justify-between items-center mb-6">
-              <span className="text-xl font-semibold text-gray-900">Total:</span>
-              <span className="text-2xl font-bold text-green-600">R$ {getCartTotal().toFixed(2)}</span>
-            </div>
-            
+
+            {isCheckoutExpanded && (
+              <div className="space-y-3 sm:space-y-4 mb-4">
+                <div>
+                  <label htmlFor="clientName" className="block text-sm font-medium text-gray-700 mb-1">
+                    Seu Nome
+                  </label>
+                  <input
+                    type="text"
+                    id="clientName"
+                    value={clientName || ''}
+                    onChange={(e) => setClientName(e.target.value)}
+                    placeholder="Digite seu nome"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 text-sm sm:text-base"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="deliveryMethod" className="block text-sm font-medium text-gray-700 mb-1">
+                    Método de Entrega
+                  </label>
+                  <select
+                    id="deliveryMethod"
+                    value={deliveryMethod || ''}
+                    onChange={(e) => setDeliveryMethod(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 text-sm sm:text-base"
+                  >
+                    <option value="">Selecione uma opção</option>
+                    <option value="Retirada na Loja">Retirada na Loja</option>
+                    <option value="Entrega">Entrega</option>
+                  </select>
+                </div>
+                <div>
+                  <label htmlFor="paymentMethod" className="block text-sm font-medium text-gray-700 mb-1">
+                    Forma de Pagamento
+                  </label>
+                  <select
+                    id="paymentMethod"
+                    value={paymentMethod || ''}
+                    onChange={(e) => setPaymentMethod(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 text-sm sm:text-base"
+                  >
+                    <option value="">Selecione uma opção</option>
+                    <option value="Pix">Pix</option>
+                    <option value="Cartão de Débito">Cartão de Débito</option>
+                    <option value="Cartão de Crédito">Cartão de Crédito</option>
+                    <option value="Dinheiro">Dinheiro</option>
+                  </select>
+                </div>
+              </div>
+            )}
+
             <button
               onClick={sendWhatsAppOrder}
-              disabled={!clientName.trim() || !deliveryMethod || !paymentMethod}
-              className={`w-full bg-green-600 text-white py-4 px-6 rounded-lg text-lg font-semibold transition-colors flex items-center justify-center space-x-2 ${
-                !clientName.trim() || !deliveryMethod || !paymentMethod ? 'opacity-50 cursor-not-allowed' : 'hover:bg-green-700'
+              disabled={!clientName?.trim() || !deliveryMethod || !paymentMethod}
+              className={`w-full bg-green-600 text-white py-3 sm:py-4 px-4 sm:px-6 rounded-lg text-sm sm:text-lg font-semibold transition-colors flex items-center justify-center space-x-2 ${
+                !clientName?.trim() || !deliveryMethod || !paymentMethod ? 'opacity-50 cursor-not-allowed' : 'hover:bg-green-700'
               }`}
             >
-              <MessageCircle className="w-5 h-5" />
+              <MessageCircle className="w-4 sm:w-5 h-4 sm:h-5" />
               <span>Finalizar Pedido via WhatsApp</span>
             </button>
             
-            <p className="text-center text-sm text-gray-500 mt-3">
+            <p className="text-center text-xs sm:text-sm text-gray-500 mt-3">
               Você será direcionado para o WhatsApp com seu pedido pronto
             </p>
           </div>
@@ -162,8 +186,9 @@ const CartModal = ({ setShowCart, cartItems, updateQuantity, removeFromCart, get
   );
 };
 
+// Componente Principal
 const RenovaItanhangaLanding = () => {
-  // ============== ESTADOS PRINCIPAIS ==============
+  // Estados principais
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
   const [cartItems, setCartItems] = useState([]);
@@ -172,17 +197,17 @@ const RenovaItanhangaLanding = () => {
   const [showScrollButton, setShowScrollButton] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(null);
   const [clientName, setClientName] = useState('');
-  const [deliveryMethod, setDeliveryMethod] = useState(''); // Novo estado para método de entrega
-  const [paymentMethod, setPaymentMethod] = useState(''); // Novo estado para forma de pagamento
+  const [deliveryMethod, setDeliveryMethod] = useState('');
+  const [paymentMethod, setPaymentMethod] = useState('');
 
-  // Ref para manter a posição do scroll do carrinho
+  // Ref para scroll do carrinho
   const cartScrollRef = useRef(null);
 
-  // ============== CONFIGURAÇÕES ==============
+  // Configurações
   const WHATSAPP_NUMBER = '5521979100303';
   const STORE_NAME = 'Renova Itanhangá';
 
-  // ============== DADOS DOS BANNERS ==============
+  // Dados dos banners
   const banners = [
     {
       id: 1,
@@ -218,7 +243,7 @@ const RenovaItanhangaLanding = () => {
     }
   ];
 
-  // ============== DADOS DOS PRODUTOS POR CATEGORIA ==============
+  // Dados dos produtos por categoria
   const productCategories = {
     promocoes: {
       title: "🔥 Promoções Imperdíveis",
@@ -492,7 +517,7 @@ const RenovaItanhangaLanding = () => {
     }
   };
 
-  // ============== CONFIGURAÇÕES DE CATEGORIAS ==============
+  // Configurações de categorias
   const categoryTabs = [
     { key: 'promocoes', label: '🔥 Promoções' },
     { key: 'estrutural', label: '🏗️ Estrutural' },
@@ -501,14 +526,14 @@ const RenovaItanhangaLanding = () => {
     { key: 'hidraulica', label: '🚿 Hidráulica' }
   ];
 
-  // ============== TIMER DE PROMOÇÃO ==============
+  // Timer de promoção
   const [promoTimer, setPromoTimer] = useState({
     endTime: Date.now() + (24 * 60 * 60 * 1000),
     hours: 24,
     minutes: 0
   });
 
-  // ============== EFEITOS ==============
+  // Efeitos
   useEffect(() => {
     if (showCart) {
       document.body.style.overflow = 'hidden';
@@ -546,7 +571,6 @@ const RenovaItanhangaLanding = () => {
   }, [promoTimer.endTime]);
 
   useEffect(() => {
-    // Pausa o timer de banners se o carrinho estiver aberto para evitar re-renders desnecessários
     if (showCart) return;
 
     const interval = setInterval(() => {
@@ -555,14 +579,14 @@ const RenovaItanhangaLanding = () => {
     return () => clearInterval(interval);
   }, [banners.length, showCart]);
 
-  // ============== FUNÇÕES AUXILIARES ==============
+  // Funções auxiliares
   const getCategoryColor = (categoryKey) => {
     const colors = {
       promocoes: 'bg-red-500 border-red-200',
       estrutural: 'bg-blue-500 border-blue-200', 
       ferragens: 'bg-yellow-500 border-yellow-200',
       acabamento: 'bg-purple-500 border-purple-200',
-      hidraulica: 'bg-teal-500 border-teal-200'
+      hidraulica: 'bg-green-600 border-green-200'
     };
     return colors[categoryKey] || 'bg-gray-500 border-gray-200';
   };
@@ -577,7 +601,7 @@ const RenovaItanhangaLanding = () => {
   const currentProducts = productCategories[activeCategory]?.products || [];
   const currentCategoryInfo = productCategories[activeCategory] || {};
 
-  // ============== FUNÇÕES DO CARRINHO ==============
+  // Funções do carrinho
   const addToCart = (product) => {
     setCartItems(prevItems => {
       const existingItem = prevItems.find(item => item.id === product.id);
@@ -673,28 +697,28 @@ const RenovaItanhangaLanding = () => {
     setPaymentMethod('');
   };
 
-  // ============== MODAL DE CONFIRMAÇÃO DE EXCLUSÃO ==============
+  // Modal de confirmação de exclusão
   const DeleteConfirmModal = () => (
-    <div className="fixed inset-0 bg-black bg-opacity-75 z-[60] flex items-center justify-center p-4" style={{ zIndex: 9999 }}>
-      <div className="bg-white rounded-lg max-w-md w-full p-6 shadow-2xl">
+    <div className="fixed inset-0 bg-black bg-opacity-75 z-[60] flex items-center justify-center p-2 sm:p-4">
+      <div className="bg-white rounded-lg max-w-sm w-full p-4 sm:p-6 shadow-2xl">
         <div className="text-center">
-          <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
-            <Trash2 className="h-6 w-6 text-red-600" />
+          <div className="mx-auto flex items-center justify-center h-10 sm:h-12 w-10 sm:w-12 rounded-full bg-red-100 mb-4">
+            <Trash2 className="h-5 sm:h-6 w-5 sm:w-6 text-red-600" />
           </div>
-          <h3 className="text-lg font-medium text-gray-900 mb-2">Confirmar Remoção</h3>
-          <p className="text-sm text-gray-500 mb-6">
+          <h3 className="text-base sm:text-lg font-medium text-gray-900 mb-2">Confirmar Remoção</h3>
+          <p className="text-xs sm:text-sm text-gray-500 mb-4 sm:mb-6">
             Tem certeza que deseja remover "<span className="font-semibold">{showDeleteConfirm?.productName}</span>" do carrinho?
           </p>
-          <div className="flex space-x-3">
+          <div className="flex space-x-2 sm:space-x-3">
             <button
               onClick={() => setShowDeleteConfirm(null)}
-              className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-900 px-4 py-2 rounded-lg font-medium transition-colors"
+              className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-900 px-3 sm:px-4 py-2 rounded-lg font-medium transition-colors text-sm sm:text-base"
             >
               Cancelar
             </button>
             <button
               onClick={confirmRemoveFromCart}
-              className="flex-1 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+              className="flex-1 bg-red-600 hover:bg-red-700 text-white px-3 sm:px-4 py-2 rounded-lg font-medium transition-colors text-sm sm:text-base"
             >
               Sim, Remover
             </button>
@@ -712,23 +736,23 @@ const RenovaItanhangaLanding = () => {
     <div className="min-h-screen bg-white">
       {/* HEADER */}
       <header className="bg-white shadow-md sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
-            <div className="flex items-center space-x-4">
-              <h1 className="text-2xl font-bold text-green-600">Renova Itanhangá</h1>
-              <span className="hidden sm:inline text-sm text-gray-500">Materiais de Construção</span>
+        <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
+          <div className="flex justify-between items-center py-3 sm:py-4">
+            <div className="flex items-center space-x-2 sm:space-x-4">
+              <h1 className="text-xl sm:text-2xl font-bold text-green-600">Renova Itanhangá</h1>
+              <span className="hidden sm:inline text-xs sm:text-sm text-gray-500">Materiais de Construção</span>
             </div>
 
-            <nav className="hidden md:flex items-center space-x-6">
-              <a href="#produtos" className="text-gray-700 hover:text-green-600 transition-colors">Produtos</a>
-              <a href="#sobre" className="text-gray-700 hover:text-green-600 transition-colors">Sobre</a>
-              <a href="#contato" className="text-gray-700 hover:text-green-600 transition-colors">Contato</a>
+            <nav className="hidden md:flex items-center space-x-4 lg:space-x-6">
+              <a href="#produtos" className="text-gray-700 hover:text-green-600 transition-colors text-sm lg:text-base">Produtos</a>
+              <a href="#sobre" className="text-gray-700 hover:text-green-600 transition-colors text-sm lg:text-base">Sobre</a>
+              <a href="#contato" className="text-gray-700 hover:text-green-600 transition-colors text-sm lg:text-base">Contato</a>
               
-              <button onClick={() => setShowCart(true)} className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors relative">
-                <ShoppingCart className="w-4 h-4 inline mr-2" />
+              <button onClick={() => setShowCart(true)} className="bg-green-600 text-white px-3 sm:px-4 py-2 rounded-lg hover:bg-green-700 transition-colors relative text-sm lg:text-base">
+                <ShoppingCart className="w-4 h-4 inline mr-1 sm:mr-2" />
                 Carrinho
                 {getCartItemCount() > 0 && (
-                  <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-6 h-6 flex items-center justify-center">
+                  <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 sm:w-6 h-5 sm:h-6 flex items-center justify-center">
                     {getCartItemCount()}
                   </span>
                 )}
@@ -737,16 +761,16 @@ const RenovaItanhangaLanding = () => {
 
             <div className="md:hidden flex items-center space-x-2">
               <button onClick={() => setShowCart(true)} className="bg-green-600 text-white p-2 rounded-lg hover:bg-green-700 transition-colors relative">
-                <ShoppingCart className="w-5 h-5" />
+                <ShoppingCart className="w-4 sm:w-5 h-4 sm:h-5" />
                 {getCartItemCount() > 0 && (
-                  <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                  <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-4 sm:w-5 h-4 sm:h-5 flex items-center justify-center">
                     {getCartItemCount()}
                   </span>
                 )}
               </button>
               
               <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="p-2 text-gray-600 hover:bg-gray-50 rounded-lg">
-                {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+                {mobileMenuOpen ? <X className="w-5 sm:w-6 h-5 sm:h-6" /> : <Menu className="w-5 sm:w-6 h-5 sm:h-6" />}
               </button>
             </div>
           </div>
@@ -754,45 +778,46 @@ const RenovaItanhangaLanding = () => {
 
         {mobileMenuOpen && (
           <div className="md:hidden bg-white border-t border-gray-200">
-            <div className="px-4 py-2 space-y-2">
-              <a href="#produtos" className="block py-2 text-gray-700 hover:text-green-600">Produtos</a>
-              <a href="#sobre" className="block py-2 text-gray-700 hover:text-green-600">Sobre</a>
-              <a href="#contato" className="block py-2 text-gray-700 hover:text-green-600">Contato</a>
+            <div className="px-2 sm:px-4 py-2 space-y-2">
+              <a href="#produtos" className="block py-2 text-gray-700 hover:text-green-600 text-sm sm:text-base">Produtos</a>
+              <a href="#sobre" className="block py-2 text-gray-700 hover:text-green-600 text-sm sm:text-base">Sobre</a>
+              <a href="#contato" className="block py-2 text-gray-700 hover:text-green-600 text-sm sm:text-base">Contato</a>
             </div>
           </div>
         )}
       </header>
 
       {/* HERO BANNER */}
-      <section className="relative h-[60vh] min-h-[400px] overflow-hidden">
+      <section className="relative h-[50vh] sm:h-[60vh] min-h-[350px] overflow-hidden">
         <div className="absolute inset-0 bg-cover bg-center transition-all duration-1000" style={{ backgroundImage: `url(${currentBanner.image})` }}>
           <div className="absolute inset-0 bg-black bg-opacity-40"></div>
         </div>
 
         <div className="relative z-10 h-full flex items-center">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-            <div className="max-w-2xl">
-              <h2 className="text-4xl md:text-6xl font-bold text-white mb-4 leading-tight">{currentBanner.title}</h2>
-              <p className="text-xl md:text-2xl text-white mb-6 opacity-90">{currentBanner.subtitle}</p>
+          <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 w-full">
+            <div className="max-w-xl sm:max-w-2xl">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-3 sm:mb-4 leading-tight">{currentBanner.title}</h2>
+              <p className="text-base sm:text-lg md:text-xl text-white mb-4 sm:mb-6 opacity-90">{currentBanner.subtitle}</p>
 
-              <div className="bg-red-600 text-white px-6 py-3 rounded-lg inline-block mb-6 animate-pulse">
+              <div className="bg-red-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg inline-block mb-4 sm:mb-6 animate-pulse">
                 <div className="flex items-center space-x-2">
-                  <Clock className="w-5 h-5" />
-                  <span className="font-bold">OFERTA EXPIRA EM: {promoTimer.hours}h {promoTimer.minutes}min</span>
+                  <Clock className="w-4 sm:w-5 h-4 sm:h-5" />
+                  <span className="font-bold text-sm sm:text-base">OFERTA EXPIRA EM: {promoTimer.hours}h {promoTimer.minutes}min</span>
                 </div>
               </div>
 
               <button
-                  onClick={() => {
-                    if (currentBanner.ctaLink.startsWith("#")) {
-                      document.querySelector(currentBanner.ctaLink)?.scrollIntoView({ behavior: "smooth" });
-                    } else {
-                      window.location.href = currentBanner.ctaLink;
-                    }
-                  }}
-                  className="bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-all transform hover:scale-105 shadow-lg">
-                  {currentBanner.ctaText}
-            </button>
+                onClick={() => {
+                  if (currentBanner.ctaLink.startsWith("#")) {
+                    document.querySelector(currentBanner.ctaLink)?.scrollIntoView({ behavior: "smooth" });
+                  } else {
+                    window.location.href = currentBanner.ctaLink;
+                  }
+                }}
+                className="bg-green-600 hover:bg-green-700 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg text-base sm:text-lg font-semibold transition-all transform hover:scale-105 shadow-lg"
+              >
+                {currentBanner.ctaText}
+              </button>
             </div>
           </div>
         </div>
@@ -802,7 +827,7 @@ const RenovaItanhangaLanding = () => {
             <button
               key={index}
               onClick={() => setCurrentBannerIndex(index)}
-              className={`w-3 h-3 rounded-full transition-colors ${
+              className={`w-2 sm:w-3 h-2 sm:h-3 rounded-full transition-colors ${
                 index === currentBannerIndex ? 'bg-white' : 'bg-white bg-opacity-50'
               }`}
             />
@@ -811,55 +836,55 @@ const RenovaItanhangaLanding = () => {
       </section>
 
       {/* BENEFÍCIOS */}
-      <section className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+      <section className="py-12 sm:py-16 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-8">
             <div className="text-center">
-              <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Truck className="w-8 h-8 text-green-600" />
+              <div className="bg-green-100 w-14 sm:w-16 h-14 sm:h-16 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                <Truck className="w-6 sm:w-8 h-6 sm:h-8 text-green-600" />
               </div>
-              <h3 className="font-semibold text-gray-900 mb-2">Frete Grátis</h3>
-              <p className="text-sm text-gray-600">Acima de R$ 200</p>
+              <h3 className="font-semibold text-gray-900 mb-1 sm:mb-2 text-sm sm:text-base">Frete Grátis</h3>
+              <p className="text-xs sm:text-sm text-gray-600">Acima de R$ 200</p>
             </div>
             <div className="text-center">
-              <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Shield className="w-8 h-8 text-blue-600" />
+              <div className="bg-blue-100 w-14 sm:w-16 h-14 sm:h-16 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                <Shield className="w-6 sm:w-8 h-6 sm:h-8 text-blue-600" />
               </div>
-              <h3 className="font-semibold text-gray-900 mb-2">Garantia</h3>
-              <p className="text-sm text-gray-600">Em todos os produtos</p>
+              <h3 className="font-semibold text-gray-900 mb-1 sm:mb-2 text-sm sm:text-base">Garantia</h3>
+              <p className="text-xs sm:text-sm text-gray-600">Em todos os produtos</p>
             </div>
             <div className="text-center">
-              <div className="bg-yellow-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <CreditCard className="w-8 h-8 text-yellow-600" />
+              <div className="bg-yellow-100 w-14 sm:w-16 h-14 sm:h-16 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                <CreditCard className="w-6 sm:w-8 h-6 sm:h-8 text-yellow-600" />
               </div>
-              <h3 className="font-semibold text-gray-900 mb-2">Parcelamento</h3>
-              <p className="text-sm text-gray-600">Até 12x sem juros</p>
+              <h3 className="font-semibold text-gray-900 mb-1 sm:mb-2 text-sm sm:text-base">Parcelamento</h3>
+              <p className="text-xs sm:text-sm text-gray-600">Até 12x sem juros</p>
             </div>
             <div className="text-center">
-              <div className="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Star className="w-8 h-8 text-purple-600" />
+              <div className="bg-purple-100 w-14 sm:w-16 h-14 sm:h-16 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                <Star className="w-6 sm:w-8 h-6 sm:h-8 text-purple-600" />
               </div>
-              <h3 className="font-semibold text-gray-900 mb-2">Qualidade</h3>
-              <p className="text-sm text-gray-600">Produtos certificados</p>
+              <h3 className="font-semibold text-gray-900 mb-1 sm:mb-2 text-sm sm:text-base">Qualidade</h3>
+              <p className="text-xs sm:text-sm text-gray-600">Produtos certificados</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* PRODUTOS POR CATEGORIA */}
-      <section id="produtos" className="py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Promoções Imperdíveis</h2>
-            <p className="text-xl text-gray-600">30 Ofertas Imperdíveis + Tudo Para Sua Obra</p>
+      <section id="produtos" className="py-12 sm:py-16">
+        <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
+          <div className="text-center mb-8 sm:mb-12">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">Promoções Imperdíveis</h2>
+            <p className="text-base sm:text-lg text-gray-600">30 Ofertas Imperdíveis + Tudo Para Sua Obra</p>
           </div>
 
-          <div className="flex flex-wrap justify-center mb-8 gap-2" id="category-tabs">
+          <div className="flex flex-wrap justify-center mb-6 sm:mb-8 gap-2" id="category-tabs">
             {categoryTabs.map((tab) => (
               <button
                 key={tab.key}
                 onClick={() => setActiveCategory(tab.key)}
-                className={`px-3 py-2 md:px-4 md:py-3 rounded-lg text-xs md:text-base font-semibold transition-all duration-300 border-2 ${
+                className={`px-2 sm:px-3 py-1 sm:py-2 md:px-4 md:py-3 rounded-lg text-xs sm:text-sm md:text-base font-semibold transition-all duration-300 border-2 ${
                   activeCategory === tab.key
                     ? `${getCategoryColor(tab.key)} text-white shadow-lg transform scale-105`
                     : 'bg-white text-gray-700 border-gray-200 hover:border-gray-300 hover:shadow-md'
@@ -870,47 +895,47 @@ const RenovaItanhangaLanding = () => {
             ))}
           </div>
 
-          <div className="text-center mb-8">
-            <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">{currentCategoryInfo.title}</h3>
-            <p className="text-lg text-gray-600">{currentCategoryInfo.subtitle}</p>
+          <div className="text-center mb-6 sm:mb-8">
+            <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 mb-2">{currentCategoryInfo.title}</h3>
+            <p className="text-base sm:text-lg text-gray-600">{currentCategoryInfo.subtitle}</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
             {currentProducts.map(product => (
               <div key={product.id} className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:scale-105 relative">
                 {product.bestseller && (
-                  <div className="absolute top-4 left-4 z-10">
-                    <div className="bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold animate-pulse">
+                  <div className="absolute top-3 sm:top-4 left-3 sm:left-4 z-10">
+                    <div className="bg-red-500 text-white px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-bold animate-pulse">
                       Mais Vendido
                     </div>
                   </div>
                 )}
                 
-                <div className="absolute top-4 right-4 z-10">
-                  <div className="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-bold">
+                <div className="absolute top-3 sm:top-4 right-3 sm:right-4 z-10">
+                  <div className="bg-green-600 text-white px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-bold">
                     -{Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}%
                   </div>
                 </div>
 
                 <div className="relative overflow-hidden">
-                  <img src={product.image} alt={product.name} className="w-full h-48 object-cover transition-transform duration-300 hover:scale-110" />
+                  <img src={product.image} alt={product.name} className="w-full h-40 sm:h-48 object-cover transition-transform duration-300 hover:scale-110" />
                 </div>
                 
-                <div className="p-6">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-3 h-12 flex items-center">{product.name}</h3>
-                  <div className="mb-4">
+                <div className="p-4 sm:p-6">
+                  <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-2 sm:mb-3 h-10 sm:h-12 flex items-center">{product.name}</h3>
+                  <div className="mb-3 sm:mb-4">
                     <div className="flex items-center space-x-2 mb-1">
-                      <span className="text-2xl font-bold text-green-600">R$ {product.price.toFixed(2)}</span>
-                      <span className="text-lg text-gray-500 line-through">R$ {product.originalPrice.toFixed(2)}</span>
+                      <span className="text-lg sm:text-2xl font-bold text-green-600">R$ {product.price.toFixed(2)}</span>
+                      <span className="text-sm sm:text-lg text-gray-500 line-through">R$ {product.originalPrice.toFixed(2)}</span>
                     </div>
-                    <p className="text-sm text-green-600 font-medium">
+                    <p className="text-xs sm:text-sm text-green-600 font-medium">
                       Economia de R$ {(product.originalPrice - product.price).toFixed(2)}
                     </p>
                   </div>
                   
                   <button 
                     onClick={() => addToCart(product)}
-                    className="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white py-3 px-4 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+                    className="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white py-2 sm:py-3 px-4 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl text-sm sm:text-base"
                   >
                     Adicionar ao Carrinho
                   </button>
@@ -919,8 +944,8 @@ const RenovaItanhangaLanding = () => {
             ))}
           </div>
 
-          <div className="text-center mt-8">
-            <p className="text-gray-600">
+          <div className="text-center mt-6 sm:mt-8">
+            <p className="text-gray-600 text-sm sm:text-base">
               Mostrando <span className="font-bold text-green-600">{currentProducts.length}</span> produtos 
               da categoria <span className="font-bold">{currentCategoryInfo.title}</span>
             </p>
@@ -929,19 +954,19 @@ const RenovaItanhangaLanding = () => {
       </section>
 
       {/* CTA FINAL */}
-      <section className="py-16 bg-gradient-to-r from-green-600 to-green-800 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Pronto para começar sua obra?</h2>
-          <p className="text-xl mb-8 opacity-90">Entre em contato conosco e receba um orçamento personalizado</p>
-          <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
-            <button className="bg-white text-green-600 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-100 transition-colors">
+      <section className="py-12 sm:py-16 bg-gradient-to-r from-green-600 to-green-800 text-white">
+        <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 text-center">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">Pronto para começar sua obra?</h2>
+          <p className="text-base sm:text-lg mb-6 sm:mb-8 opacity-90">Entre em contato conosco e receba um orçamento personalizado</p>
+          <div className="flex flex-col sm:flex-row justify-center space-y-3 sm:space-y-0 sm:space-x-4">
+            <button className="bg-white text-green-600 px-6 sm:px-8 py-3 sm:py-4 rounded-lg text-sm sm:text-lg font-semibold hover:bg-gray-100 transition-colors">
               Solicitar Orçamento
             </button>
             <button 
               onClick={() => window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=Olá! Gostaria de mais informações sobre os produtos da ${STORE_NAME}.`, '_blank')}
-              className="border-2 border-white text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-white hover:text-green-600 transition-colors flex items-center justify-center space-x-2"
+              className="border-2 border-white text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg text-sm sm:text-lg font-semibold hover:bg-white hover:text-green-600 transition-colors flex items-center justify-center space-x-2"
             >
-              <MessageCircle className="w-5 h-5" />
+              <MessageCircle className="w-4 sm:w-5 h-4 sm:h-5" />
               <span>Falar no WhatsApp</span>
             </button>
           </div>
@@ -949,117 +974,117 @@ const RenovaItanhangaLanding = () => {
       </section>
 
       {/* FOOTER */}
-      <footer className="bg-gray-900 text-white py-12">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          <div>
-            <h3 className="text-xl font-bold text-green-400 mb-4">Renova Itanhangá</h3>
-            <p className="text-gray-300 mb-4">Sua loja de materiais de construção de confiança há mais de 20 anos.</p>
-            <div className="text-gray-400">
-              <p>📍 Itanhangá, Rio de Janeiro - RJ</p>
-              <p>📞 (21) 979100303</p>
-              <p>✉️ contato@renovaitanhanga.com.br</p>
+      <footer className="bg-gray-900 text-white py-8 sm:py-12">
+        <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
+            <div>
+              <h3 className="text-lg sm:text-xl font-bold text-green-400 mb-3 sm:mb-4">Renova Itanhangá</h3>
+              <p className="text-gray-300 mb-3 sm:mb-4 text-sm sm:text-base">Sua loja de materiais de construção de confiança há mais de 20 anos.</p>
+              <div className="text-gray-400 text-xs sm:text-sm">
+                <p>📍 Itanhangá, Rio de Janeiro - RJ</p>
+                <p>📞 (21) 979100303</p>
+                <p>✉️ contato@renovaitanhanga.com.br</p>
+              </div>
+              <div className="mt-4 sm:mt-6">
+                <h4 className="font-semibold mb-3 sm:mb-4 text-sm sm:text-base">Siga-nos</h4>
+                <ul className="space-y-2 text-gray-300 text-xs sm:text-sm">
+                  <li>
+                    <a
+                      href="https://www.instagram.com/sua-conta-real"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center hover:text-green-400 transition-colors"
+                    >
+                      <Instagram className="w-4 sm:w-5 h-4 sm:h-5 mr-2" />
+                      Instagram
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="https://www.facebook.com/sua-conta-real"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center hover:text-green-400 transition-colors"
+                    >
+                      <Facebook className="w-4 sm:w-5 h-4 sm:h-5 mr-2" />
+                      Facebook
+                    </a>
+                  </li>
+                </ul>
+              </div>
             </div>
-            <div className="mt-6">
-              <h4 className="font-semibold mb-4">Siga-nos</h4>
-              <ul className="space-y-2 text-gray-300">
+
+            <div>
+              <h4 className="font-semibold mb-3 sm:mb-4 text-sm sm:text-base">Entrega Rápida Direto na Sua Residência</h4>
+              <ul className="space-y-2 text-gray-300 text-xs sm:text-sm">
                 <li>
-                  <a
-                    href="https://www.instagram.com/sua-conta-real"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center hover:text-green-400 transition-colors"
+                  <button
+                    onClick={() => setShowEntrega(!showEntrega)}
+                    className="hover:text-green-400 transition-colors flex items-center"
                   >
-                    <Instagram className="w-5 h-5 mr-2" />
-                    Instagram
-                  </a>
+                    Política de Entrega
+                    <span className={`ml-2 transform transition-transform ${showEntrega ? "rotate-180" : ""}`}>
+                      ▼
+                    </span>
+                  </button>
+                  {showEntrega && (
+                    <p className="mt-2 text-xs sm:text-sm text-gray-400">
+                      Nossas entregas são realizadas em até 3 horas após a confirmação do pagamento. O prazo pode variar conforme a região.
+                    </p>
+                  )}
                 </li>
                 <li>
-                  <a
-                    href="https://www.facebook.com/sua-conta-real"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center hover:text-green-400 transition-colors"
+                  <button
+                    onClick={() => setShowTrocas(!showTrocas)}
+                    className="hover:text-green-400 transition-colors flex items-center"
                   >
-                    <Facebook className="w-5 h-5 mr-2" />
-                    Facebook
-                  </a>
+                    Devoluções & Trocas
+                    <span className={`ml-2 transform transition-transform ${showTrocas ? "rotate-180" : ""}`}>
+                      ▼
+                    </span>
+                  </button>
+                  {showTrocas && (
+                    <p className="mt-2 text-xs sm:text-sm text-gray-400">
+                      Aceitamos devoluções e trocas em até 7 dias após a entrega, desde que o produto esteja em perfeitas condições.
+                    </p>
+                  )}
                 </li>
+              </ul>
+            </div>
+
+            <div>
+              <h4 className="font-semibold mb-3 sm:mb-4 text-sm sm:text-base">Empresa</h4>
+              <ul className="space-y-2 text-gray-300 text-xs sm:text-sm">
+                <li><a href="#" className="hover:text-green-400 transition-colors">Sobre Nós</a></li>
+                <li><a href="#" className="hover:text-green-400 transition-colors">Nossas Lojas</a></li>
+                <li><a href="#" className="hover:text-green-400 transition-colors">Política de Privacidade</a></li>
+              </ul>
+            </div>
+
+            <div>
+              <h4 className="font-semibold mb-3 sm:mb-4 text-sm sm:text-base">Atendimento</h4>
+              <ul className="space-y-2 text-gray-300 text-xs sm:text-sm">
+                <li>Segunda a Sexta: 7h às 18h</li>
+                <li>Sábado: 7h às 16h</li>
+                <li>Domingo: 8h às 12h</li>
               </ul>
             </div>
           </div>
 
-          <div>
-            <h4 className="font-semibold mb-4">Entrega Rápida Direto na Sua Residência</h4>
-            <ul className="space-y-2 text-gray-300">
-              <li>
-                <button
-                  onClick={() => setShowEntrega(!showEntrega)}
-                  className="hover:text-green-400 transition-colors flex items-center"
-                >
-                  Política de Entrega
-                  <span className={`ml-2 transform transition-transform ${showEntrega ? "rotate-180" : ""}`}>
-                    ▼
-                  </span>
-                </button>
-                {showEntrega && (
-                  <p className="mt-2 text-sm text-gray-400">
-                    Nossas entregas são realizadas em até 3 horas após a confirmação do pagamento. O prazo pode variar conforme a região.
-                  </p>
-                )}
-              </li>
-              <li>
-                <button
-                  onClick={() => setShowTrocas(!showTrocas)}
-                  className="hover:text-green-400 transition-colors flex items-center"
-                >
-                  Devoluções & Trocas
-                  <span className={`ml-2 transform transition-transform ${showTrocas ? "rotate-180" : ""}`}>
-                    ▼
-                  </span>
-                </button>
-                {showTrocas && (
-                  <p className="mt-2 text-sm text-gray-400">
-                    Aceitamos devoluções e trocas em até 7 dias após a entrega, desde que o produto esteja em perfeitas condições.
-                  </p>
-                )}
-              </li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="font-semibold mb-4">Empresa</h4>
-            <ul className="space-y-2 text-gray-300">
-              <li><a href="#" className="hover:text-green-400 transition-colors">Sobre Nós</a></li>
-              <li><a href="#" className="hover:text-green-400 transition-colors">Nossas Lojas</a></li>
-              <li><a href="#" className="hover:text-green-400 transition-colors">Política de Privacidade</a></li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="font-semibold mb-4">Atendimento</h4>
-            <ul className="space-y-2 text-gray-300">
-              <li>Segunda a Sexta: 7h às 18h</li>
-              <li>Sábado: 7h às 16h</li>
-              <li>Domingo: 8h às 12h</li>
-            </ul>
+          <div className="border-t border-gray-700 mt-6 sm:mt-8 pt-6 sm:pt-8 text-center text-gray-400 text-xs sm:text-sm">
+            <p>&copy; 2025 Renova Itanhangá. Todos os direitos reservados.</p>
           </div>
         </div>
-
-        <div className="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
-          <p>&copy; 2025 Renova Itanhangá. Todos os direitos reservados.</p>
-        </div>
-      </div>
-    </footer>
+      </footer>
 
       {/* BOTÃO FLUTUANTE PARA SUBIR */}
       {showScrollButton && (
         <button
           onClick={scrollToProducts}
-          className="fixed bottom-6 right-6 bg-green-600 hover:bg-green-700 text-white p-4 rounded-full shadow-2xl transition-all duration-300 transform hover:scale-110 z-40 animate-bounce"
+          className="fixed bottom-4 sm:bottom-6 right-4 sm:right-6 bg-green-600 hover:bg-green-700 text-white p-3 sm:p-4 rounded-full shadow-2xl transition-all duration-300 transform hover:scale-110 z-40 animate-bounce"
           title="Voltar às categorias"
         >
-          <ChevronUp className="w-6 h-6" />
+          <ChevronUp className="w-5 sm:w-6 h-5 sm:h-6" />
         </button>
       )}
 
