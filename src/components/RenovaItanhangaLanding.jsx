@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Instagram, Facebook, ShoppingCart, Clock, Star, Shield, Truck, CreditCard, Menu, X, Plus, Minus, Trash2, MessageCircle, ChevronUp, ChevronDown, Search } from 'lucide-react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -622,9 +622,9 @@ const RenovaItanhangaLanding = () => {
   };
 
   // Verificar se há filtros ativos
-  const hasFilters = () => {
+  const hasFilters = useCallback(() => {
     return searchTerm.trim() !== '' || priceFilter !== '' || bestsellerFilter;
-  };
+  }, [searchTerm, priceFilter, bestsellerFilter]);
 
   // Filtragem global de produtos com mudança de categoria
   const getFilteredProductsAndCategory = () => {
@@ -671,7 +671,7 @@ const RenovaItanhangaLanding = () => {
     if (hasFilters() && !isManualCategoryChange && foundCategory !== activeCategory) {
       setActiveCategory(foundCategory);
     }
-  }, [searchTerm, priceFilter, bestsellerFilter, activeCategory, foundCategory, isManualCategoryChange, hasFilters]);
+  }, [searchTerm, priceFilter, bestsellerFilter, activeCategory, foundCategory, hasFilters, isManualCategoryChange]);
 
   // Funções do carrinho
   const addToCart = (product) => {
