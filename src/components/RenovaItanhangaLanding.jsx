@@ -3,9 +3,14 @@ import { Instagram, Facebook, ShoppingCart, Clock, Star, Shield, Truck, CreditCa
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-// Componente CartModal
+// Componente CartModal (com alterações no input de nome)
 const CartModal = ({ setShowCart, cartItems, updateQuantity, removeFromCart, getCartItemCount, getCartTotal, sendWhatsAppOrder, cartScrollRef, clientName, setClientName, deliveryMethod, setDeliveryMethod, paymentMethod, setPaymentMethod }) => {
   const [isCheckoutExpanded, setIsCheckoutExpanded] = useState(false);
+
+  // Função para resetar o zoom (adicionada aqui para isolamento)
+  const resetZoom = () => {
+    document.documentElement.style.zoom = '1';
+  };
 
   // Verificação para evitar erro de renderização
   if (!cartItems) {
@@ -131,6 +136,12 @@ const CartModal = ({ setShowCart, cartItems, updateQuantity, removeFromCart, get
                     id="clientName"
                     value={clientName || ''}
                     onChange={(e) => setClientName(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        e.target.blur(); // Fecha o teclado
+                        resetZoom(); // Reseta o zoom
+                      }
+                    }}
                     placeholder="Digite seu nome"
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg 
                               focus:outline-none focus:ring-2 focus:ring-green-600 
@@ -192,7 +203,7 @@ const CartModal = ({ setShowCart, cartItems, updateQuantity, removeFromCart, get
   );
 };
 
-// Componente Principal
+// Componente Principal (sem alterações, como solicitado)
 const RenovaItanhangaLanding = () => {
   // Estados principais
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -860,7 +871,7 @@ const RenovaItanhangaLanding = () => {
               >
                 <ShoppingCart className="w-4 sm:w-5 h-4 sm:h-5" />
                 {getCartItemCount() > 0 && (
-                  <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-4 sm:w-5 h-4 sm:h-5 flex items-center justify-center">
+                  <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-4 sm:w-6 h-4 sm:h-5 flex items-center justify-center">
                     {getCartItemCount()}
                   </span>
                 )}
