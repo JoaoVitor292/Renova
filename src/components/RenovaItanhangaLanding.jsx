@@ -140,7 +140,9 @@ const CartModal = ({ setShowCart, cartItems, updateQuantity, removeFromCart, get
                     id="deliveryMethod"
                     value={deliveryMethod || ''}
                     onChange={(e) => setDeliveryMethod(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 text-sm sm:text-base"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg 
+         focus:outline-none focus:ring-2 focus:ring-green-600 
+         text-base sm:text-sm"
                   >
                     <option value="">Selecione uma opção</option>
                     <option value="Retirada na Loja">Retirada na Loja</option>
