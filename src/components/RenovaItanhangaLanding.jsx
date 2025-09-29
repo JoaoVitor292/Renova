@@ -204,6 +204,7 @@ const RenovaItanhangaLanding = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [priceFilter, setPriceFilter] = useState('');
   const [bestsellerFilter, setBestsellerFilter] = useState(false);
+  const [isManualCategoryChange, setIsManualCategoryChange] = useState(false);
 
   // Ref para scroll do carrinho
   const cartScrollRef = useRef(null);
@@ -591,6 +592,11 @@ const RenovaItanhangaLanding = () => {
     return () => clearInterval(interval);
   }, [banners.length, showCart]);
 
+  // Resetar isManualCategoryChange quando os filtros mudarem
+  useEffect(() => {
+    setIsManualCategoryChange(false);
+  }, [searchTerm, priceFilter, bestsellerFilter]);
+
   // Funções auxiliares
   const getCategoryColor = (categoryKey) => {
     const colors = {
@@ -615,14 +621,18 @@ const RenovaItanhangaLanding = () => {
     document.documentElement.style.zoom = '1';
   };
 
+  // Verificar se há filtros ativos
+  const hasFilters = () => {
+    return searchTerm.trim() !== '' || priceFilter !== '' || bestsellerFilter;
+  };
+
   // Filtragem global de produtos com mudança de categoria
   const getFilteredProductsAndCategory = () => {
     let foundCategory = activeCategory;
     let filtered = [];
     
-    for (const key in productCategories) {
-      const products = productCategories[key].products;
-      const matches = products.filter(product => {
+    const filterProducts = (products) => {
+      return products.filter(product => {
         const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase());
         const matchesPrice = priceFilter
           ? (priceFilter === '0-50' && product.price <= 50) ||
@@ -632,13 +642,23 @@ const RenovaItanhangaLanding = () => {
         const matchesBestseller = bestsellerFilter ? product.bestseller : true;
         return matchesSearch && matchesPrice && matchesBestseller;
       });
-      
-      if (matches.length > 0) {
-        if (key !== activeCategory) {
-          foundCategory = key;
+    };
+
+    if (!hasFilters()) {
+      filtered = productCategories[activeCategory].products;
+    } else {
+      filtered = filterProducts(productCategories[activeCategory].products);
+      if (filtered.length === 0) {
+        for (const key in productCategories) {
+          if (key !== activeCategory) {
+            const matches = filterProducts(productCategories[key].products);
+            if (matches.length > 0) {
+              foundCategory = key;
+              filtered = matches;
+              break;
+            }
+          }
         }
-        filtered = matches;
-        break; // Para na primeira categoria com matches
       }
     }
     
@@ -648,10 +668,10 @@ const RenovaItanhangaLanding = () => {
   const { filtered, foundCategory } = getFilteredProductsAndCategory();
 
   useEffect(() => {
-    if (foundCategory !== activeCategory) {
+    if (hasFilters() && !isManualCategoryChange && foundCategory !== activeCategory) {
       setActiveCategory(foundCategory);
     }
-  }, [searchTerm, priceFilter, bestsellerFilter]);
+  }, [searchTerm, priceFilter, bestsellerFilter, activeCategory, foundCategory, isManualCategoryChange, hasFilters]);
 
   // Funções do carrinho
   const addToCart = (product) => {
@@ -958,6 +978,7 @@ const RenovaItanhangaLanding = () => {
                 key={tab.key}
                 onClick={() => {
                   setActiveCategory(tab.key);
+                  setIsManualCategoryChange(true);
                   setSearchTerm('');
                   setPriceFilter('');
                   setBestsellerFilter(false);
