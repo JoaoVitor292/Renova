@@ -26,7 +26,7 @@ const CartModal = ({ setShowCart, cartItems, updateQuantity, removeFromCart, get
           <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
             Carrinho ({getCartItemCount ? getCartItemCount() : 0} {getCartItemCount && getCartItemCount() === 1 ? 'item' : 'itens'})
           </h2>
-          <button onClick={() => setShowCart(false)} className="p-2 hover:bg-gray-100 rounded-lg">
+          <button onClick={() => setShowCart(false)} className="p-2 hover:bg-gray-100 rounded-lg" aria-label="Fechar carrinho">
             <X className="w-5 sm:w-6 h-5 sm:h-6" />
           </button>
         </div>
@@ -69,6 +69,7 @@ const CartModal = ({ setShowCart, cartItems, updateQuantity, removeFromCart, get
                     <button 
                       onClick={() => updateQuantity(item.id, item.quantity - 1)} 
                       className="p-1 hover:bg-gray-200 rounded"
+                      aria-label="Diminuir quantidade"
                     >
                       <Minus className="w-3 h-3" />
                     </button>
@@ -78,6 +79,7 @@ const CartModal = ({ setShowCart, cartItems, updateQuantity, removeFromCart, get
                     <button 
                       onClick={() => updateQuantity(item.id, item.quantity + 1)} 
                       className="p-1 hover:bg-gray-200 rounded"
+                      aria-label="Aumentar quantidade"
                     >
                       <Plus className="w-3 h-3" />
                     </button>
@@ -89,6 +91,7 @@ const CartModal = ({ setShowCart, cartItems, updateQuantity, removeFromCart, get
                     <button 
                       onClick={() => removeFromCart(item.id)} 
                       className="text-red-600 hover:text-red-800 mt-1"
+                      aria-label="Remover item do carrinho"
                     >
                       <Trash2 className="w-3 h-3" />
                     </button>
@@ -106,6 +109,7 @@ const CartModal = ({ setShowCart, cartItems, updateQuantity, removeFromCart, get
               <button
                 onClick={() => setIsCheckoutExpanded(!isCheckoutExpanded)}
                 className="flex items-center space-x-2 text-green-600 hover:text-green-700 transition-colors text-sm sm:text-base font-semibold"
+                
               >
                 <span>
                   {isCheckoutExpanded ? 'Visualizar Produtos' : 'Conferir Dados'}
@@ -876,9 +880,9 @@ const RenovaItanhangaLanding = () => {
                   </span>
                 )}
               </button>
-              
-              <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="p-2 text-gray-600 hover:bg-gray-50 rounded-lg">
-                {mobileMenuOpen ? <X className="w-5 sm:w-6 h-5 sm:h-6" /> : <Menu className="w-5 sm:w-6 h-5 sm:h-6" />}
+              <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="p-2 text-gray-600 hover:bg-gray-50 rounded-lg"
+               aria-label={mobileMenuOpen ? "Fechar menu" : "Abrir menu"}>
+                {mobileMenuOpen ? <X className="w-5 sm:w-6 h-5 sm:h-6" aria-hidden="true" /> : <Menu className="w-5 sm:w-6 h-5 sm:h-6" aria-hidden="true"/>}
               </button>
             </div>
           </div>
@@ -915,6 +919,7 @@ const RenovaItanhangaLanding = () => {
               </div>
 
               <button
+               type="button"
                 onClick={() => {
                   if (currentBanner.ctaLink.startsWith("#")) {
                     document.querySelector(currentBanner.ctaLink)?.scrollIntoView({ behavior: "smooth" });
@@ -938,6 +943,8 @@ const RenovaItanhangaLanding = () => {
               className={`w-2 sm:w-3 h-2 sm:h-3 rounded-full transition-colors ${
                 index === currentBannerIndex ? 'bg-white' : 'bg-white bg-opacity-50'
               }`}
+              aria-label={`Banner ${index + 1}`}
+              aria-current={index === currentBannerIndex ? 'true' : undefined}    
             />
           ))}
         </div>
@@ -987,7 +994,7 @@ const RenovaItanhangaLanding = () => {
             <p className="text-base sm:text-lg text-gray-600">30 Ofertas Imperdíveis + Tudo Para Sua Obra</p>
           </div>
 
-          <div className="flex flex-wrap justify-center mb-6 sm:mb-8 gap-2" id="category-tabs">
+          <div className="flex flex-wrap justify-center mb-6 sm:mb-8 gap-2" id="category-tabs" role="tablist">
             {categoryTabs.map((tab) => (
               <button
                 key={tab.key}
@@ -998,6 +1005,8 @@ const RenovaItanhangaLanding = () => {
                   setPriceFilter('');
                   setBestsellerFilter(false);
                 }}
+                role="tab"
+                aria-selected={activeCategory === tab.key}
                 className={`px-2 sm:px-3 py-1 sm:py-2 md:px-4 md:py-3 rounded-lg text-xs sm:text-sm md:text-base font-semibold transition-all duration-300 border-2 ${
                   activeCategory === tab.key
                     ? `${getCategoryColor(tab.key)} text-white shadow-lg transform scale-105`
@@ -1029,6 +1038,7 @@ const RenovaItanhangaLanding = () => {
                   value={priceFilter}
                   onChange={(e) => setPriceFilter(e.target.value)}
                   className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 text-sm sm:text-base"
+                  aria-label="Filtrar por preço"
                 >
                   <option value="">Todos os Preços</option>
                   <option value="0-50">Até R$50</option>
@@ -1091,7 +1101,8 @@ const RenovaItanhangaLanding = () => {
                       </p>
                     </div>
                     
-                    <button 
+                    <button
+                      type="button" 
                       onClick={() => addToCart(product)}
                       className="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white py-2 sm:py-3 px-4 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl text-sm sm:text-base"
                     >
@@ -1138,7 +1149,9 @@ const RenovaItanhangaLanding = () => {
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">Pronto para começar sua obra?</h2>
           <p className="text-base sm:text-lg mb-6 sm:mb-8 opacity-90">Entre em contato conosco e receba um orçamento personalizado</p>
           <div className="flex flex-col sm:flex-row justify-center space-y-3 sm:space-y-0 sm:space-x-4">
-            <button className="bg-white text-green-600 px-6 sm:px-8 py-3 sm:py-4 rounded-lg text-sm sm:text-lg font-semibold hover:bg-gray-100 transition-colors">
+            <button
+             type="button"
+             className="bg-white text-green-600 px-6 sm:px-8 py-3 sm:py-4 rounded-lg text-sm sm:text-lg font-semibold hover:bg-gray-100 transition-colors">
               Solicitar Orçamento
             </button>
             <button 
@@ -1200,9 +1213,11 @@ const RenovaItanhangaLanding = () => {
                   <button
                     onClick={() => setShowEntrega(!showEntrega)}
                     className="hover:text-green-400 transition-colors flex items-center"
+                    aria-expanded={showEntrega}
+                    aria-controls="entrega-content"
                   >
                     Política de Entrega
-                    <span className={`ml-2 transform transition-transform ${showEntrega ? "rotate-180" : ""}`}>
+                    <span className={`ml-2 transform transition-transform ${showEntrega ? "rotate-180" : ""}`} aria-hidden="true">
                       ▼
                     </span>
                   </button>
@@ -1216,9 +1231,12 @@ const RenovaItanhangaLanding = () => {
                   <button
                     onClick={() => setShowTrocas(!showTrocas)}
                     className="hover:text-green-400 transition-colors flex items-center"
+                    aria-expanded={showTrocas}
+                    aria-controls="trocas-content"
                   >
                     Devoluções & Trocas
-                    <span className={`ml-2 transform transition-transform ${showTrocas ? "rotate-180" : ""}`}>
+                    <span className={`ml-2 transform transition-transform ${showTrocas ? "rotate-180" : ""}`}
+                     aria-hidden="true">
                       ▼
                     </span>
                   </button>
@@ -1261,9 +1279,9 @@ const RenovaItanhangaLanding = () => {
         <button
           onClick={scrollToProducts}
           className="fixed bottom-4 sm:bottom-6 right-4 sm:right-6 bg-green-600 hover:bg-green-700 text-white p-3 sm:p-4 rounded-full shadow-2xl transition-all duration-300 transform hover:scale-110 z-40 animate-bounce"
-          title="Voltar às categorias"
+          aria-label="Voltar às categorias"
         >
-          <ChevronUp className="w-5 sm:w-6 h-5 sm:h-6" />
+          <ChevronUp className="w-5 sm:w-6 h-5 sm:h-6" aria-hidden="true"/>
         </button>
       )}
 
