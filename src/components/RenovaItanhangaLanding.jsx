@@ -1143,6 +1143,33 @@ const RenovaItanhangaLanding = () => {
         </div>
       </section>
 
+      {/* MAPA */}
+        <section className="py-12 sm:py-16 bg-gray-100">
+          <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 text-center mb-8 sm:mb-12">Nossa Localização</h2>
+            <div className="relative w-full h-64 sm:h-80 md:h-96 rounded-lg overflow-hidden shadow-lg">
+              <a
+                href="https://www.google.com/maps/place/R.+Nova,+1251,+Rio+das+Pedras,+Rio+de+Janeiro+-+RJ,+22753-703"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block w-full h-full"
+              >
+                <iframe
+                  className="w-full h-full"
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3674.940253688093!2d-43.32146368453675!3d-22.975841985003416!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x997b7b7e7b7b7b%3A0x7b7b7b7b7b7b7b7b!2sR.+Nova%2C+1251%2C+Rio+das+Pedras%2C+Rio+de+Janeiro+-+RJ%2C+22753-703!5e0!3m2!1spt-BR!2sbr!4v1635781234567!5m2!1spt-BR!2sbr"
+                  allowFullScreen=""
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                ></iframe>
+              </a>
+            </div>
+            <p className="text-center mt-4 text-gray-600 text-sm sm:text-base">
+              R. Nova, 1251 - Rio das Pedras, Rio de Janeiro - RJ, 22753-703
+            </p>
+          </div>
+        </section>
+      
+
       {/* CTA FINAL */}
       <section className="py-12 sm:py-16 bg-gradient-to-r from-green-600 to-green-800 text-white">
         <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 text-center">
