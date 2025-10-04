@@ -544,7 +544,180 @@ const RenovaItanhangaLanding = () => {
           price: 76.90,
           image: "/Renova/images/produtos/fio.png",
           bestseller: false
-        }
+        },
+        {
+          id: 31,
+          name: "Fio Elétrico 2.5mm - 100m",
+          originalPrice: 89.90,
+          price: 76.90,
+          image: "/Renova/images/produtos/fio.png",
+          bestseller: false
+        },
+        {
+          id: 32,
+          name: "Fio Elétrico 2.5mm - 100m",
+          originalPrice: 89.90,
+          price: 76.90,
+          image: "/Renova/images/produtos/fio.png",
+          bestseller: false
+        },
+        {
+          id: 33,
+          name: "Fio Elétrico 2.5mm - 100m",
+          originalPrice: 89.90,
+          price: 76.90,
+          image: "/Renova/images/produtos/fio.png",
+          bestseller: false
+        },
+        {
+          id: 34,
+          name: "Fio Elétrico 2.5mm - 100m",
+          originalPrice: 89.90,
+          price: 76.90,
+          image: "/Renova/images/produtos/fio.png",
+          bestseller: false
+        },
+        {
+          id: 35,
+          name: "Fio Elétrico 2.5mm - 100m",
+          originalPrice: 89.90,
+          price: 76.90,
+          image: "/Renova/images/produtos/fio.png",
+          bestseller: false
+        },
+      ]
+    },
+    eletrica: {
+      title: "💡 Elétrica & Iluminação",
+      subtitle: "Soluções elétricas para sua construção",
+      products: [
+        {
+          id: 36,
+          name: "Cano PVC 100mm - 6m",
+          originalPrice: 45.90,
+          price: 38.90,
+          image: "/Renova/images/produtos/tuboPVC.png",
+          bestseller: true
+        },
+        {
+          id: 37,
+          name: "Registro Gaveta 1/2\"",
+          originalPrice: 28.50,
+          price: 22.90,
+          image: "/Renova/images/produtos/registro.png",
+          bestseller: false
+        },
+        {
+          id: 38,
+          name: "Caixa d'Água 1000L",
+          originalPrice: 485.00,
+          price: 425.90,
+          image: "/Renova/images/produtos/caixadeagua.png",
+          bestseller: true
+        },
+        {
+          id: 39,
+          name: "Fio Elétrico 2.5mm - 100m",
+          originalPrice: 89.90,
+          price: 76.90,
+          image: "/Renova/images/produtos/fio.png",
+          bestseller: false
+        },
+        {
+          id: 40,
+          name: "Fio Elétrico 2.5mm - 100m",
+          originalPrice: 89.90,
+          price: 76.90,
+          image: "/Renova/images/produtos/fio.png",
+          bestseller: false
+        },
+        {
+          id: 41,
+          name: "Fio Elétrico 2.5mm - 100m",
+          originalPrice: 89.90,
+          price: 76.90,
+          image: "/Renova/images/produtos/fio.png",
+          bestseller: false
+        },
+      ]
+    },
+    madeira: {
+      title: "🪵 Madeira",
+      subtitle: "Madeiras de qualidade para sua construção",
+      products: [
+          {
+          id: 42,
+          name: "Cano PVC 100mm - 6m",
+          originalPrice: 45.90,
+          price: 38.90,
+          image: "/Renova/images/produtos/tuboPVC.png",
+          bestseller: true
+        },
+        {
+          id: 43,
+          name: "Registro Gaveta 1/2\"",
+          originalPrice: 28.50,
+          price: 22.90,
+          image: "/Renova/images/produtos/registro.png",
+          bestseller: false
+        },
+        {
+          id: 44,
+          name: "Caixa d'Água 1000L",
+          originalPrice: 485.00,
+          price: 425.90,
+          image: "/Renova/images/produtos/caixadeagua.png",
+          bestseller: true
+        },
+        {
+          id: 45,
+          name: "Fio Elétrico 2.5mm - 100m",
+          originalPrice: 89.90,
+          price: 76.90,
+          image: "/Renova/images/produtos/fio.png",
+          bestseller: false
+        },
+        {
+          id: 46,
+          name: "Fio Elétrico 2.5mm - 100m",
+          originalPrice: 89.90,
+          price: 76.90,
+          image: "/Renova/images/produtos/fio.png",
+          bestseller: false
+        },
+        {
+          id: 47,
+          name: "Fio Elétrico 2.5mm - 100m",
+          originalPrice: 89.90,
+          price: 76.90,
+          image: "/Renova/images/produtos/fio.png",
+          bestseller: false
+        },
+        {
+          id: 48,
+          name: "Fio Elétrico 2.5mm - 100m",
+          originalPrice: 89.90,
+          price: 76.90,
+          image: "/Renova/images/produtos/fio.png",
+          bestseller: false
+        },
+        {
+          id: 49,
+          name: "Fio Elétrico 2.5mm - 100m",
+          originalPrice: 89.90,
+          price: 76.90,
+          image: "/Renova/images/produtos/fio.png",
+          bestseller: false
+        },
+        {
+          id: 50,
+          name: "Fio Elétrico 2.5mm - 100m",
+          originalPrice: 89.90,
+          price: 76.90,
+          image: "/Renova/images/produtos/fio.png",
+          bestseller: false
+        },
+        
       ]
     }
   };
@@ -555,7 +728,9 @@ const RenovaItanhangaLanding = () => {
     { key: 'estrutural', label: '🏗️ Estrutural' },
     { key: 'ferragens', label: '🔧 Ferragens' },
     { key: 'acabamento', label: '🎨 Acabamento' },
-    { key: 'hidraulica', label: '🚿 Hidráulica' }
+    { key: 'hidraulica', label: '🚿 Hidráulica' },
+    { key: 'eletrica', label: '💡 Eletrica' },
+    { key: 'madeira', label: '🪵 Madeira' },
   ];
 
   // Timer de promoção
@@ -991,7 +1166,7 @@ const RenovaItanhangaLanding = () => {
         <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
           <div className="text-center mb-8 sm:mb-12">
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">Promoções Imperdíveis</h2>
-            <p className="text-base sm:text-lg text-gray-600">30 Ofertas Imperdíveis + Tudo Para Sua Obra</p>
+            <p className="text-base sm:text-lg text-gray-600">50 Ofertas Imperdíveis + Tudo Para Sua Obra</p>
           </div>
 
           <div className="flex flex-wrap justify-center mb-6 sm:mb-8 gap-2" id="category-tabs" role="tablist">
